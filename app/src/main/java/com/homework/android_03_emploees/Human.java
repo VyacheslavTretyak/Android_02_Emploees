@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 class Human {
 
-    public	String	firstName;
+    public String firstName;
     public String lastName;
     public boolean gender;
     public Calendar birthDay;

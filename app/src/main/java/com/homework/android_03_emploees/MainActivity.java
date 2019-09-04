@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Bitmap manPic;
     public Bitmap womenPic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Emploee> emploees = new ArrayList<>();
         try {
             JSONArray arr = obj.getJSONArray("emploees");
-            for (int i = 0; i<arr.length(); i++) {
+            for (int i = 0; i < arr.length(); i++) {
                 JSONObject o = arr.getJSONObject(i);
                 emploees.add(new Emploee(o.getString("firstName"),
                         o.getString("lastName"),
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         o.getInt("month"),
                         o.getInt("year")));
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return;
         }
 
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                if (MainActivity.this.curItem != -1){
+                if (MainActivity.this.curItem != -1) {
                     MainActivity.this.curView.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
                 MainActivity.this.curItem = position;
@@ -87,5 +90,25 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException ioe) {
             Log.println(Log.ERROR, "error", ioe.getMessage());
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.action_add:
+                break;
+            case R.id.action_edit:
+                break;
+            case R.id.action_delete:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

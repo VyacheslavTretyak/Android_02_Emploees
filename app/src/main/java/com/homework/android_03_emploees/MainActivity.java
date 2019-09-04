@@ -16,6 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -37,17 +40,27 @@ public class MainActivity extends AppCompatActivity {
         listView = this.findViewById(R.id.list);
         listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
+        String jsonString = "{\"emploees\":[{\"firstName\":\"firstName1\", \"lastName\":\"lastName1\",\"gender\":\"true\",\"day\":\"11\",\"month\":\"3\",\"year\":\"1987\"},{\"firstName\":\"firstName2\", \"lastName\":\"lastName2\",\"gender\":\"true\",\"day\":\"17\",\"month\":\"11\",\"year\":\"1971\"},{\"firstName\":\"firstName3\", \"lastName\":\"lastName3\",\"gender\":\"false\",\"day\":\"13\",\"month\":\"1\",\"year\":\"1993\"},{\"firstName\":\"firstName1\", \"lastName\":\"lastName1\",\"gender\":\"true\",\"day\":\"23\",\"month\":\"7\",\"year\":\"1997\"}]}";
+
+        DataManager dataManager = new DataManager(this);
+        dataManager.create(jsonString);
+        JSONObject obj = dataManager.getObj();
+
         ArrayList<Emploee> emploees = new ArrayList<>();
-
-        Emploee e1 = new Emploee("firstName1", "lastName1", true, 10, 3, 1986);
-        Emploee e2 = new Emploee("firstName2", "lastName2", true, 20, 10, 1983);
-        Emploee e3 = new Emploee("firstName3", "lastName3", false, 30, 11, 1991);
-        Emploee e4 = new Emploee("firstName4", "lastName4", true, 15, 6, 1999);
-
-        emploees.add(e1);
-        emploees.add(e2);
-        emploees.add(e3);
-        emploees.add(e4);
+        try {
+            JSONArray arr = obj.getJSONArray("emploees");
+            for (int i = 0; i<arr.length(); i++) {
+                JSONObject o = arr.getJSONObject(i);
+                emploees.add(new Emploee(o.getString("firstName"),
+                        o.getString("lastName"),
+                        o.getBoolean("gender"),
+                        o.getInt("day"),
+                        o.getInt("month"),
+                        o.getInt("year")));
+            }
+        }catch (Exception ex){
+            return;
+        }
 
         EmploeeAdapter adapter = new EmploeeAdapter(this, R.layout.activity_emploee, emploees);
         listView.setAdapter(adapter);
